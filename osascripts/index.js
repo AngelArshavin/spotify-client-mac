@@ -33,9 +33,13 @@ function status(){
 		artist: execute('tell application "Spotify" to artist of current track as string'),
 		album: execute('tell application "Spotify" to album of current track as string'),
 		track: execute('tell application "Spotify" to name of current track as string'),
+		durationSecs: execute('tell application "Spotify" to duration of current track').then((durationMs) => {
+			return moment.duration(durationMs, 'milliseconds').asSeconds();
+		}),
 		duration: execute('tell application "Spotify" to duration of current track').then((durationMs) => {
 			return moment.duration(durationMs, 'milliseconds').format();
 		}),
+		positionSecs: execute('tell application "Spotify" to player position'),
 		position: getPosition()
 	});
 }
@@ -60,13 +64,19 @@ function unmute(){
 	return execute('tell application "Spotify" to set sound volume to 100');
 }
 
-function setVolume(deltaVolume){
+function changeVolume(deltaVolume){
 	return getVolume().then((currentVolume) => {
 		var newVolume = currentVolume + deltaVolume;
 		if(newVolume > 100) newVolume = 100;
 		if(newVolume < 0) newVolume = 0;
 		return execute('tell application "Spotify" to set sound volume to newVolume', {newVolume});
 	});
+}
+
+function setVolume(newVolume){
+	if(newVolume > 100) newVolume = 100;
+	if(newVolume < 0) newVolume = 0;
+	return execute('tell application "Spotify" to set sound volume to newVolume', {newVolume});
 }
 
 function getVolume(){
@@ -159,6 +169,7 @@ module.exports = {
 	previous,
 	mute,
 	unmute,
+	changeVolume,
 	setVolume,
 	getVolume,
 	replay,
