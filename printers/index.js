@@ -11,18 +11,6 @@ const SearchResultPrinters = {
 	'tracks': trackPrinterFn
 };
 
-function warning(m){
-	console.log(
-		chalk.orange(m)
-	);
-}
-
-function error(e){
-	console.log(
-		chalk.red(e)
-	);
-}
-
 function albumPrinterFn(data){
 	data.forEach((result) => {
 		console.log(
@@ -178,8 +166,6 @@ function printConfig(){
 }
 
 module.exports = {
-	error,
-	warning,
 	printSearchResults,
 	printPlayerStatus,
 	printNext,

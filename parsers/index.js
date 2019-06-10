@@ -8,11 +8,8 @@ const SearchResultParsers = {
 	'albums': albumParserFn,
 	'artists': artistParserFn,
 	'playlists': playlistParserFn,
-	'playlistsByUser': playlistParserFn,
 	'tracks': trackParserFn
 };
-
-
 
 function albumParserFn(resultType, data){
 	return data.body[resultType].items.map((resultEntry, index) => {
@@ -45,33 +42,21 @@ function artistParserFn(resultType, data){
 		};
 	});
 }
-function playlistParserFn(resultType,data){
-	if (resultType === 'playlistsByUser') {
-		return data.body.items.map(({name, id, uri, tracks}, index) => {
-			return {
-				resultIndex: index + 1,
-				name,
-				id,
-				uri,
-				noOfTracks: tracks.total
-			};
-		});
-	}
-	else {
-		return data.body[resultType].items.map((resultEntry, index) => {
-			var resultIndex = index + 1;
-			var name = resultEntry.name;
-			var noOfTracks = resultEntry.tracks.total;
-			var spotifyURI = resultEntry.uri;
 
-			return {
-				resultIndex,
-				name,
-				noOfTracks,
-				spotifyURI
-			};
-		});
-	}
+function playlistParserFn(resultType, data){
+	return data.body[resultType].items.map((resultEntry, index) => {
+		var resultIndex = index + 1;
+		var name = resultEntry.name;
+		var noOfTracks = resultEntry.tracks.total;
+		var spotifyURI = resultEntry.uri;
+
+		return {
+			resultIndex,
+			name,
+			noOfTracks,
+			spotifyURI
+		};
+	});
 }
 
 function trackParserFn(resultType, data){
